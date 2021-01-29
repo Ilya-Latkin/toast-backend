@@ -1,0 +1,16 @@
+spring.application.name=Toast
+
+    jwt.secret=
+
+    debug=false
+    host=http://localhost:8080/
+
+spring.datasource.platform=postgres
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.datasource.sql-script-encoding=utf-8
+spring.datasource.url=jdbc:postgresql://localhost:5432/
+spring.datasource.username=
+spring.datasource.password=
+
+spring.jpa.hibernate.ddl-auto=create
+spring.jpa.show-sql=true
