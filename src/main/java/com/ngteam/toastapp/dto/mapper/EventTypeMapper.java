@@ -20,6 +20,9 @@ public class EventTypeMapper {
     @Autowired
     JwtHelper jwtHelper;
 
+    @Autowired
+    UserMapper userMapper;
+
     public EventType toEventTypeConverter(EventTypeDto eventTypeDto) {
         return toEventTypeConverter(eventTypeDto, new EventType());
     }
@@ -34,7 +37,7 @@ public class EventTypeMapper {
         EventTypeOutDto eventTypeOutDto = new EventTypeOutDto();
         eventTypeOutDto.setId(eventType.getId());
         eventTypeOutDto.setName(eventType.getName());
-        eventTypeOutDto.setUser(eventType.getUser().getName());
+        eventTypeOutDto.setUser(userMapper.toUserDtoOut(eventType.getUser()));
         eventTypeOutDto.setEvents(
                 eventType.getEvents()
                         .stream()

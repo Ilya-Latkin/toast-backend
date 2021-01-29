@@ -2,6 +2,7 @@ package com.ngteam.toastapp.config.filter;
 
 import com.ngteam.toastapp.model.User;
 import com.ngteam.toastapp.repositories.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,14 +21,11 @@ import java.util.Optional;
 import java.util.Set;
 
 @Component
+@AllArgsConstructor
 public class JwtFilter extends GenericFilterBean {
+
     private final JwtHelper jwtHelper;
     private final UserRepository userRepository;
-
-    public JwtFilter(JwtHelper jwtHelper, UserRepository userRepository) {
-        this.jwtHelper = jwtHelper;
-        this.userRepository = userRepository;
-    }
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {

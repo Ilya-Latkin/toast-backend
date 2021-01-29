@@ -3,6 +3,7 @@ package com.ngteam.toastapp.dto.mapper;
 import com.ngteam.toastapp.dto.in.CategoryDto;
 import com.ngteam.toastapp.dto.out.CategoryOutDto;
 import com.ngteam.toastapp.model.Category;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,6 +11,9 @@ import java.util.stream.Collectors;
 
 @Service
 public class CategoryMapper {
+
+    @Autowired
+    UserMapper userMapper;
 
     public Category toCategoryConvert(CategoryDto categoryDto) {
         return toCategoryConvert(categoryDto, new Category());
@@ -25,6 +29,7 @@ public class CategoryMapper {
         CategoryOutDto categoryOutDto = new CategoryOutDto();
         categoryOutDto.setId(category.getId());
         categoryOutDto.setName(category.getName());
+        categoryOutDto.setUser(userMapper.toUserDtoOut(category.getUser()));
         categoryOutDto.setEvents(
                 category.getEvents()
                         .stream()

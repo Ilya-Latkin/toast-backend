@@ -17,6 +17,9 @@ public class EventMapper {
     EventTypeMapper eventTypeMapper;
 
     @Autowired
+    UserMapper userMapper;
+
+    @Autowired
     CategoryMapper categoryMapper;
 
     public Event toEventConverter(EventDto eventDto) {
@@ -37,10 +40,12 @@ public class EventMapper {
         eventOutDto.setDate(event.getDate());
         eventOutDto.setEventType(eventTypeMapper.toEventTypeDtoConvert(event.getEventType()));
         eventOutDto.setCategory(categoryMapper.toCategoryDtoConvert(event.getCategory()));
+        eventOutDto.setUser(userMapper.toUserDtoOut(event.getUser()));
         return eventOutDto;
     }
 
-/*
+/*      //autizm with flague//
+
     public EventTypeOutDto toEventTypeOutDtoConvert(EventType eventType, boolean flag) {
         EventTypeOutDto eventTypeOutDto = new EventTypeOutDto();
         eventTypeOutDto.setId(eventType.getId());

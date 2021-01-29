@@ -11,5 +11,5 @@ public class EventTypeOutDto {
     private long id;
     private String name;
     private List<EventOutDto> events;
-    private String user;
+    private UserDtoOut user;
 }

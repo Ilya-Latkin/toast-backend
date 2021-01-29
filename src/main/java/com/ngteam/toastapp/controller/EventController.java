@@ -34,65 +34,47 @@ public class EventController extends ResponseCreator {
     @PostMapping
     ResponseEntity createEvent(@RequestHeader String authorization, @RequestBody EventDto eventDto) {
         String token = JwtHelper.getTokenFromHeader(authorization);
-        if(jwtHelper.validateToken(token)) {
             Event event = new Event(eventDto.getName(), eventDto.getDescription(), eventDto.getDate(),
                     eventTypeRepository.findById(eventDto.getEventTypeId()).orElseThrow(NotFoundException::new),
                     categoryRepository.findById(eventDto.getCategoryId()).orElseThrow(NotFoundException::new));
 
-            String emailFromToken = jwtHelper.getEmailFromToken(token);
-            Optional<User> optionalUser = userRepository.findByEmail(emailFromToken);
-            User user = optionalUser.get();
-            event.setUser(user);
+            event.setUser(userRepository.findByEmail(jwtHelper.getEmailFromToken(token))
+                    //autizm
+                    .orElseThrow(() -> new NotFoundException("User with email " + jwtHelper.getEmailFromToken(token) + " not found")));
             eventRepository.save(event);
-            return createGoodResponse(eventDto);
-        } else return createErrorResponse(ErrorEntity.INVALID_TOKEN_TOKEN);
+            return createGoodResponse(eventMapper.toEventOutDtoConvert(event));
     }
 
     @PutMapping(path = "/{id}")
-    ResponseEntity updateEventById(@RequestHeader String authorization, @RequestBody EventDto eventDto, @PathVariable long id) {
-        String token = JwtHelper.getTokenFromHeader(authorization);
-        if(jwtHelper.validateToken(token)) {
-            Optional<Event> eventOptional = eventRepository.findById(id);
-            if(eventOptional.isPresent()) {
-                Event event = eventOptional.get();
-                event.setName(eventDto.getName());
-                event.setCategory(categoryRepository.findById(eventDto.getCategoryId()).orElseThrow(NotFoundException::new));
-                event.setDate(eventDto.getDate());
-                event.setEventType(eventTypeRepository.findById(eventDto.getEventTypeId()).orElseThrow(NotFoundException::new));
-                eventRepository.save(event);
-                return createGoodResponse();
-            } else return createErrorResponse(ErrorEntity.NOT_FOUND);
-        } else return createErrorResponse(ErrorEntity.INVALID_TOKEN_TOKEN);
+    ResponseEntity updateEventById(@RequestBody EventDto eventDto, @PathVariable long id) {
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Event with id " + id + " not found"));
+        event.setName(eventDto.getName());
+        event.setCategory(categoryRepository.findById(eventDto.getCategoryId())
+                .orElseThrow(() -> new NotFoundException("Category with id " + eventDto.getCategoryId() + " not found")));
+        event.setDate(eventDto.getDate());
+        event.setEventType(eventTypeRepository.findById(eventDto.getEventTypeId())
+                .orElseThrow(() -> new NotFoundException("Event type with id " + eventDto.getEventTypeId() + " not found")));
+        eventRepository.save(event);
+        return createGoodResponse("Updated");
     }
 
     @GetMapping
-    ResponseEntity getAllEvents(@RequestHeader String authorization){
-        String token = JwtHelper.getTokenFromHeader(authorization);
-        if(jwtHelper.validateToken(token)) {
+    ResponseEntity getAllEvents() {
             List<Event> events = eventRepository.findAll();
             return createGoodResponse(eventMapper.toEventDtoList(events));
-        } else return createErrorResponse(ErrorEntity.INVALID_TOKEN_TOKEN);
-    }
+   }
 
     @GetMapping(path = "/{id}")
-    ResponseEntity getEventById(@RequestHeader String authorization, @PathVariable long id) {
-        String token = JwtHelper.getTokenFromHeader(authorization);
-        if(jwtHelper.validateToken(token)) {
-            Event event = eventRepository.findById(id).orElseThrow(NotFoundException::new);
-            return createGoodResponse(eventMapper.toEventOutDtoConvert(event));
-        } else return createErrorResponse(ErrorEntity.INVALID_TOKEN_TOKEN);
+    ResponseEntity getEventById(@PathVariable long id) {
+            return createGoodResponse(eventMapper.toEventOutDtoConvert(eventRepository.findById(id)
+                    .orElseThrow(() -> new NotFoundException("Event with id " + id + " not found"))));
     }
 
     @DeleteMapping(path = "/{id}")
-    ResponseEntity deleteEventById(@RequestHeader String authorization, @PathVariable long id) {
-        String token = JwtHelper.getTokenFromHeader(authorization);
-        if(jwtHelper.validateToken(token)) {
-            Optional<Event> eventOptional = eventRepository.findById(id);
-            if(eventOptional.isPresent()) {
-                Event event = eventOptional.get();
-                eventRepository.delete(event);
+    ResponseEntity deleteEventById(@PathVariable long id) {
+                eventRepository.delete(eventRepository.findById(id)
+                        .orElseThrow(() -> new NotFoundException("Event with id " + id + " not found")));
                 return createGoodResponse("Deleted");
-            } else return createErrorResponse(ErrorEntity.NOT_FOUND);
-        } else return createErrorResponse(ErrorEntity.INVALID_TOKEN_TOKEN);
     }
 }

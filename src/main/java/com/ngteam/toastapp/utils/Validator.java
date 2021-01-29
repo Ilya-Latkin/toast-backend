@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 @Component
 public class Validator extends ResponseCreator {
     private final int MIN_PASSWORD_LENGTH = 5;
-    private Pattern emailPattern = Pattern.compile("^(.+)@(.+)$");
+    private final Pattern emailPattern = Pattern.compile("^(.+)@(.+)$");
 
     private final UserService userService;
 

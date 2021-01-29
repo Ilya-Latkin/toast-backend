@@ -16,4 +16,5 @@ public class EventOutDto {
     private Date date;
     private EventTypeDto eventType;
     private CategoryDto category;
+    private UserDtoOut user;
 }

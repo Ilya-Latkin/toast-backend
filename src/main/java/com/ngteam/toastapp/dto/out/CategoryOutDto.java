@@ -12,4 +12,5 @@ public class CategoryOutDto {
     private long id;
     private String name;
     private List<String> events;
+    private UserDtoOut user;
 }

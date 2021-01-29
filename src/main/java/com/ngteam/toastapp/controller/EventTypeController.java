@@ -3,6 +3,7 @@ package com.ngteam.toastapp.controller;
 import com.ngteam.toastapp.config.filter.JwtHelper;
 import com.ngteam.toastapp.dto.in.EventTypeDto;
 import com.ngteam.toastapp.dto.mapper.EventTypeMapper;
+import com.ngteam.toastapp.exceptions.NotFoundException;
 import com.ngteam.toastapp.model.EventType;
 import com.ngteam.toastapp.model.User;
 import com.ngteam.toastapp.repositories.EventTypeRepository;
@@ -29,56 +30,39 @@ public class EventTypeController extends ResponseCreator {
     @PostMapping
     ResponseEntity createEventType(@RequestHeader String authorization, @RequestBody EventTypeDto eventTypeDto) {
         String token = JwtHelper.getTokenFromHeader(authorization);
-        if(jwtHelper.validateToken(token)) {
-            Optional<EventType> eventTypeOptional = eventTypeRepository.findByName(eventTypeDto.getName());
-            if(!eventTypeOptional.isPresent()) {
-                String string = eventTypeDto.getName();
-                String convertedString = string.substring(0,1).toUpperCase() + string.substring(1).toLowerCase();
-                EventType eventType = new EventType(convertedString);
-                String emailFromToken = jwtHelper.getEmailFromToken(token);
-                Optional<User> optionalUser = userRepository.findByEmail(emailFromToken);
-                User user = optionalUser.get();
-                eventType.setUser(user);
-                eventTypeRepository.save(eventType);
-                return createGoodResponse(eventType);
-            } else return createErrorResponse(ErrorEntity.EVENT_TYPE_ALREADY_CREATED);
-        }
-        else return createErrorResponse(ErrorEntity.INVALID_TOKEN_TOKEN);
+        Optional<EventType> eventTypeOptional = eventTypeRepository.findByName(eventTypeDto.getName());
+        if (!eventTypeOptional.isPresent()) {
+            String string = eventTypeDto.getName();
+            String convertedString = string.substring(0, 1).toUpperCase() + string.substring(1).toLowerCase();
+            EventType eventType = new EventType(convertedString);
+            String emailFromToken = jwtHelper.getEmailFromToken(token);
+            User user = userRepository.findByEmail(emailFromToken)
+                    .orElseThrow(() -> new NotFoundException("User with email " + emailFromToken + " not found")); // <--- autizm
+            eventType.setUser(user);
+            eventTypeRepository.save(eventType);
+            return createGoodResponse(eventTypeMapper.toEventTypeDtoConvert(eventType));
+        } else return createErrorResponse(ErrorEntity.EVENT_TYPE_ALREADY_CREATED);
     }
 
     @GetMapping
-    ResponseEntity getAllEventType(@RequestHeader String authorization) {
-        String token = JwtHelper.getTokenFromHeader(authorization);
-        if(jwtHelper.validateToken(token)) {
+    ResponseEntity getAllEventType() {
             List<EventType> eventTypes = eventTypeRepository.findAll();
             return createGoodResponse(eventTypeMapper.toEventTypeDtoList(eventTypes));
-        } else return createErrorResponse(ErrorEntity.INVALID_TOKEN_TOKEN);
     }
 
     @GetMapping(path = "/{id}")
-    ResponseEntity getEventTypeById(@RequestHeader String authorization, @PathVariable long id) {
-        String token = JwtHelper.getTokenFromHeader(authorization);
-        if(jwtHelper.validateToken(token)) {
-            Optional<EventType> eventTypeOptional = eventTypeRepository.findById(id);
-            if(eventTypeOptional.isPresent()) {
-                EventType eventType = eventTypeOptional.get();
-                return createGoodResponse(eventTypeMapper.toEventTypeOutDtoConvert(eventType));
-            } else return createErrorResponse(ErrorEntity.NOT_FOUND);
-        } else return createErrorResponse(ErrorEntity.INVALID_TOKEN_TOKEN);
+    ResponseEntity getEventTypeById(@PathVariable long id) {
+        return createGoodResponse(eventTypeMapper.toEventTypeOutDtoConvert(eventTypeRepository.findById(id).
+                orElseThrow(() -> new NotFoundException("Event Type with id " + id + " not found"))));
     }
 
     @PutMapping(path = "/{id}")
-    ResponseEntity updateEventTypeById(@RequestHeader String authorization, @PathVariable long id, @RequestBody EventTypeDto eventTypeDto) {
-        String token = JwtHelper.getTokenFromHeader(authorization);
-        if(jwtHelper.validateToken(token)) {
-            Optional<EventType> eventTypeOptional = eventTypeRepository.findById(id);
-            if(eventTypeOptional.isPresent()) {
-                EventType eventType = eventTypeOptional.get();
+    ResponseEntity updateEventTypeById(@PathVariable long id, @RequestBody EventTypeDto eventTypeDto) {
+        EventType eventType = eventTypeRepository.findById(id).
+                orElseThrow(() -> new NotFoundException("Event Type with id " + id + " not found"));
                 eventType.setName(eventTypeDto.getName());
                 eventTypeRepository.save(eventType);
-                return createGoodResponse(eventType);
-            } else return createErrorResponse(ErrorEntity.NOT_FOUND);
-        } else return createErrorResponse(ErrorEntity.INVALID_TOKEN_TOKEN);
+                return createGoodResponse(eventTypeMapper.toEventTypeDtoConvert(eventType));
     }
 
     @DeleteMapping(path = "/{id}")
