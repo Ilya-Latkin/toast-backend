@@ -32,7 +32,6 @@ hs_err_pid*
 .idea
 cmake-build-*/
 *.iws
-out/
 target
 
 # JIRA plugin
