@@ -28,7 +28,8 @@ public class User {
     private List<Category> userCategory;
 
 
-    public User() {}
+    public User() {
+    }
 
     public User(String name, String email, String password) {
         this.name = name;

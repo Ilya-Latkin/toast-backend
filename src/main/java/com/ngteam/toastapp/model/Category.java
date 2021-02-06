@@ -20,13 +20,14 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private List<Event> events;
     @ManyToOne
-    @JoinColumn(name = "user_is")
+    @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
 
     public Category() { }
 
-    public Category(String name) {
+    public Category(String name, User user) {
         this.name = name;
+        this.user = user;
     }
 }

@@ -27,7 +27,8 @@ public class EventType {
 
     public EventType() {}
 
-    public EventType(String name) {
+    public EventType(String name, User user) {
         this.name = name;
+        this.user = user;
     }
 }

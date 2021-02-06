@@ -17,6 +17,7 @@ public enum ErrorEntity {
     EMAIL_ALREADY_TAKEN(453, "Email уже занят"),
     CATEGORY_ALREADY_CREATED(454, "Категория уже создана"),
     EVENT_TYPE_ALREADY_CREATED(454, "Тип события уже создан"),
+    EVENT_ALREADY_CREATED (454, "Событие уже создано"),
 
     // Регистрация
     PASSWORD_TOO_SHORT(460, "Пароль слишком короткий"),

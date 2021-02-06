@@ -36,11 +36,12 @@ public class Event {
 
     public Event() { }
 
-    public Event(String name, String description, Date date, EventType eventType, Category category) {
+    public Event(String name, String description, Date date, EventType eventType, Category category, User user) {
         this.name = name;
         this.description = description;
         this.date = date;
         this.eventType = eventType;
         this.category = category;
+        this.user = user;
     }
 }
