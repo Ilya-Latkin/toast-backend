@@ -20,12 +20,12 @@ public class User {
     private String name;
     @Column
     private String password;
-    @OneToMany(mappedBy = "user")
-    private List<Event> userEvent;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<EventType> userEventType;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Category> userCategory;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<Event> userEvent;
 
 
     public User() {

@@ -21,7 +21,6 @@ public class Category {
     private List<Event> events;
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonIgnore
     private User user;
 
     public Category() { }

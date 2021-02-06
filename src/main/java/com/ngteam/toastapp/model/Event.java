@@ -31,7 +31,6 @@ public class Event {
     private Category category;
     @JoinColumn(name = "user_id")
     @ManyToOne
-    @JsonIgnore
     private User user;
 
     public Event() { }

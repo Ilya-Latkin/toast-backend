@@ -4,6 +4,7 @@ import com.ngteam.toastapp.config.filter.JwtHelper;
 import com.ngteam.toastapp.dto.in.EventTypeDto;
 import com.ngteam.toastapp.dto.mapper.EventTypeMapper;
 import com.ngteam.toastapp.exceptions.NotFoundException;
+import com.ngteam.toastapp.model.Category;
 import com.ngteam.toastapp.model.EventType;
 import com.ngteam.toastapp.model.User;
 import com.ngteam.toastapp.repositories.EventTypeRepository;
@@ -65,7 +66,9 @@ public class EventTypeServiceImpl extends ResponseCreator implements EventTypeSe
 
     @Override
     public ResponseEntity deleteEventTypeById(long id) {
-        return createGoodResponse(eventTypeMapper.toEventTypeOutDtoConvert(eventTypeRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Event Type with id " + id + " not found"))));
+        EventType eventType = eventTypeRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Category with id " + id + " not found"));
+        eventTypeRepository.delete(eventType);
+        return createGoodResponse("Deleted");
     }
 }

@@ -63,7 +63,8 @@ public class CategoryServiceImpl extends ResponseCreator implements CategoryServ
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Category with id " + id + " not found"));
         categoryRepository.delete(category);
-        return createGoodResponse("Deleted");    }
+        return createGoodResponse("Deleted");
+    }
 
     @Override
     public ResponseEntity getCategoryById(long id) {
