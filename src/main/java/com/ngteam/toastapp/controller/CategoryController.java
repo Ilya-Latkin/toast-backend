@@ -20,22 +20,22 @@ public class CategoryController extends ResponseCreator {
     }
 
     @PutMapping(path = "/{id}")
-    ResponseEntity updateCategoryById(@RequestBody CategoryDto categoryDto, @PathVariable long id) {
-        return categoryServiceImpl.updateCategory(categoryDto, id);
+    ResponseEntity updateCategoryById(@RequestHeader String authorization, @RequestBody CategoryDto categoryDto, @PathVariable long id) {
+        return categoryServiceImpl.updateCategoryById(authorization, categoryDto, id);
     }
 
     @GetMapping
-    ResponseEntity getAllCategories() {
-        return categoryServiceImpl.getAllCategories();
+    ResponseEntity getAllCategories(@RequestHeader String authorization) {
+        return categoryServiceImpl.getAllCategories(authorization);
     }
 
     @GetMapping(path = "/{id}")
-    ResponseEntity getCategoryById(@PathVariable long id) {
-        return categoryServiceImpl.getCategoryById(id);
+    ResponseEntity getCategoryById(@RequestHeader String authorization, @PathVariable long id) {
+        return categoryServiceImpl.getCategoryById(authorization, id);
     }
 
     @DeleteMapping(path = "/{id}")
-    ResponseEntity deleteCategoryById(@PathVariable long id) {
-        return categoryServiceImpl.deleteCategoryById(id);
+    ResponseEntity deleteCategoryById(@RequestHeader String authorization, @PathVariable long id) {
+        return categoryServiceImpl.deleteCategoryById(authorization, id);
     }
 }

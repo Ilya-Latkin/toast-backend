@@ -4,11 +4,9 @@ import com.ngteam.toastapp.config.filter.JwtHelper;
 import com.ngteam.toastapp.dto.in.EventTypeDto;
 import com.ngteam.toastapp.dto.mapper.EventTypeMapper;
 import com.ngteam.toastapp.exceptions.NotFoundException;
-import com.ngteam.toastapp.model.Category;
 import com.ngteam.toastapp.model.EventType;
 import com.ngteam.toastapp.model.User;
 import com.ngteam.toastapp.repositories.EventTypeRepository;
-import com.ngteam.toastapp.repositories.UserRepository;
 import com.ngteam.toastapp.services.EventTypeService;
 import com.ngteam.toastapp.utils.ErrorEntity;
 import com.ngteam.toastapp.utils.ResponseCreator;
@@ -26,14 +24,10 @@ public class EventTypeServiceImpl extends ResponseCreator implements EventTypeSe
     private final EventTypeRepository eventTypeRepository;
     private final JwtHelper jwtHelper;
     private final EventTypeMapper eventTypeMapper;
-    private final UserRepository userRepository;
 
     @Override
     public ResponseEntity createEventType(String authorization, EventTypeDto eventTypeDto) {
-        String token = JwtHelper.getTokenFromHeader(authorization);
-        String emailFromToken = jwtHelper.getEmailFromToken(token);
-        User user = userRepository.findByEmail(emailFromToken)
-                .orElseThrow(() -> new NotFoundException("autizm")); // <--- autizm / shobi ne rugalsa
+        User user = jwtHelper.getUserFromHeader(authorization);
         String eventTypeNameDto = eventTypeDto.getName();
         String convertedCategoryName = eventTypeNameDto.substring(0, 1).toUpperCase() + eventTypeNameDto.substring(1).toLowerCase();
         Optional<EventType> optionalUserEventType = eventTypeRepository.findByNameAndUserId(convertedCategoryName, user);
@@ -46,27 +40,31 @@ public class EventTypeServiceImpl extends ResponseCreator implements EventTypeSe
     }
 
     @Override
-    public ResponseEntity getAllEventTypes() {
-        List<EventType> eventTypes = eventTypeRepository.findAll();
+    public ResponseEntity getAllEventTypes(String authorization) {
+        Long userId = jwtHelper.getUserFromHeader(authorization).getId();
+        List<EventType> eventTypes = eventTypeRepository.findAllByUserId(userId);
         return createGoodResponse(eventTypeMapper.toEventTypeDtoList(eventTypes));
     }
 
     @Override
-    public ResponseEntity getEventTypeById(long id) {
-        return createGoodResponse(eventTypeMapper.toEventTypeOutDtoConvert(eventTypeRepository.findById(id).
+    public ResponseEntity getEventTypeById(String authorization, long id) {
+        Long userId = jwtHelper.getUserFromHeader(authorization).getId();
+        return createGoodResponse(eventTypeMapper.toEventTypeOutDtoConvert(eventTypeRepository.findByIdAndUserId(id, userId).
                 orElseThrow(() -> new NotFoundException("Event Type with id " + id + " not found"))));    }
 
     @Override
-    public ResponseEntity updateEventTypeById(long id, EventTypeDto eventTypeDto) {
-        EventType eventType = eventTypeRepository.findById(id)
+    public ResponseEntity updateEventTypeById(String authorization, long id, EventTypeDto eventTypeDto) {
+        Long userId = jwtHelper.getUserFromHeader(authorization).getId();
+        EventType eventType = eventTypeRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new NotFoundException("Event Type with id " + id + " not found"));
         eventType.setName(eventTypeDto.getName());
         eventTypeRepository.save(eventType);
         return createGoodResponse(eventTypeMapper.toEventTypeDtoConvert(eventType));    }
 
     @Override
-    public ResponseEntity deleteEventTypeById(long id) {
-        EventType eventType = eventTypeRepository.findById(id)
+    public ResponseEntity deleteEventTypeById(String authorization, long id) {
+        Long userId = jwtHelper.getUserFromHeader(authorization).getId();
+        EventType eventType = eventTypeRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new NotFoundException("Category with id " + id + " not found"));
         eventTypeRepository.delete(eventType);
         return createGoodResponse("Deleted");

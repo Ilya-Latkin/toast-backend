@@ -8,22 +8,18 @@ import com.ngteam.toastapp.repositories.UserRepository;
 import com.ngteam.toastapp.services.UserService;
 import com.ngteam.toastapp.utils.ErrorEntity;
 import com.ngteam.toastapp.utils.ResponseCreator;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/user")
+@AllArgsConstructor
 public class UserController extends ResponseCreator {
 
     private final UserRepository userRepository;
     private final JwtHelper jwtHelper;
     private final UserService userService;
-
-    public UserController(UserRepository userRepository, JwtHelper jwtHelper, UserService userService) {
-        this.userRepository = userRepository;
-        this.jwtHelper = jwtHelper;
-        this.userService = userService;
-    }
 
     @GetMapping
     ResponseEntity getProfile(@RequestHeader String authorization) {

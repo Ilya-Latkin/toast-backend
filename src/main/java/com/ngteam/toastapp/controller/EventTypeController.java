@@ -20,22 +20,22 @@ public class EventTypeController extends ResponseCreator {
     }
 
     @GetMapping
-    ResponseEntity getAllEventTypes() {
-        return eventTypeService.getAllEventTypes();
+    ResponseEntity getAllEventTypes(@RequestHeader String authorization) {
+        return eventTypeService.getAllEventTypes(authorization);
     }
 
     @GetMapping(path = "/{id}")
-    ResponseEntity getEventTypeById(@PathVariable long id) {
-        return eventTypeService.getEventTypeById(id);
+    ResponseEntity getEventTypeById(@RequestHeader String authorization, @PathVariable long id) {
+        return eventTypeService.getEventTypeById(authorization, id);
     }
 
     @PutMapping(path = "/{id}")
-    ResponseEntity updateEventTypeById(@PathVariable long id, @RequestBody EventTypeDto eventTypeDto) {
-        return eventTypeService.updateEventTypeById(id, eventTypeDto);
+    ResponseEntity updateEventTypeById(@RequestHeader String authorization, @PathVariable long id, @RequestBody EventTypeDto eventTypeDto) {
+        return eventTypeService.updateEventTypeById(authorization, id, eventTypeDto);
     }
 
     @DeleteMapping(path = "/{id}")
-    ResponseEntity deleteEventTypeById(@PathVariable long id) {
-        return eventTypeService.deleteEventTypeById(id);
+    ResponseEntity deleteEventTypeById(@RequestHeader String authorization, @PathVariable long id) {
+        return eventTypeService.deleteEventTypeById(authorization, id);
     }
 }

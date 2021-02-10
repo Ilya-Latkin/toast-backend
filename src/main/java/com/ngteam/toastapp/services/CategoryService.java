@@ -5,8 +5,8 @@ import org.springframework.http.ResponseEntity;
 
 public interface CategoryService {
     ResponseEntity createCategory(String authorization, CategoryDto categoryDto);
-    ResponseEntity updateCategory(CategoryDto categoryDto, long id);
-    ResponseEntity getAllCategories();
-    ResponseEntity deleteCategoryById(long id);
-    ResponseEntity getCategoryById(long id);
+    ResponseEntity updateCategoryById(String authorization, CategoryDto categoryDto, long id);
+    ResponseEntity getAllCategories(String authorization);
+    ResponseEntity deleteCategoryById(String authorization, long id);
+    ResponseEntity getCategoryById(String authorization, long id);
 }

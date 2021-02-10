@@ -33,7 +33,7 @@ public class CategoryMapper {
         categoryOutDto.setEvents(
                 category.getEvents()
                         .stream()
-                        .map(event -> event.getName() + " // with id " + event.getId())
+                        .map(event -> event.getName() + "#" + event.getId())
                         .collect(Collectors.toList())
         );
         return categoryOutDto;

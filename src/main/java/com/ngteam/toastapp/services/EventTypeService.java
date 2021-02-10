@@ -5,8 +5,8 @@ import org.springframework.http.ResponseEntity;
 
 public interface EventTypeService {
     ResponseEntity createEventType(String authorization, EventTypeDto eventTypeDto);
-    ResponseEntity getAllEventTypes();
-    ResponseEntity getEventTypeById(long id);
-    ResponseEntity updateEventTypeById(long id, EventTypeDto eventTypeDto);
-    ResponseEntity deleteEventTypeById(long id);
+    ResponseEntity getAllEventTypes(String authorization);
+    ResponseEntity getEventTypeById(String authorization, long id);
+    ResponseEntity updateEventTypeById(String authorization, long id, EventTypeDto eventTypeDto);
+    ResponseEntity deleteEventTypeById(String authorization, long id);
 }

@@ -7,7 +7,6 @@ import com.ngteam.toastapp.exceptions.NotFoundException;
 import com.ngteam.toastapp.model.Category;
 import com.ngteam.toastapp.model.User;
 import com.ngteam.toastapp.repositories.CategoryRepository;
-import com.ngteam.toastapp.repositories.UserRepository;
 import com.ngteam.toastapp.services.CategoryService;
 import com.ngteam.toastapp.utils.ErrorEntity;
 import com.ngteam.toastapp.utils.ResponseCreator;
@@ -25,51 +24,52 @@ public class CategoryServiceImpl extends ResponseCreator implements CategoryServ
     private final CategoryRepository categoryRepository;
     private final JwtHelper jwtHelper;
     private final CategoryMapper categoryMapper;
-    private final UserRepository userRepository;
 
     @Override
     public ResponseEntity createCategory(String authorization, CategoryDto categoryDto) {
-        String token = JwtHelper.getTokenFromHeader(authorization);
-        String emailFromToken = jwtHelper.getEmailFromToken(token);
-        User user = userRepository.findByEmail(emailFromToken)
-                .orElseThrow(() -> new NotFoundException("autizm")); // <--- autizm / shobi ne rugalsa
+        User user = jwtHelper.getUserFromHeader(authorization);
         String categoryNameDto = categoryDto.getName();
         String convertedCategoryName = categoryNameDto.substring(0, 1).toUpperCase() + categoryNameDto.substring(1).toLowerCase();
         Optional<Category> optionalUserCategory = categoryRepository.findByNameAndUserId(convertedCategoryName, user);
-        if (optionalUserCategory.isPresent()) {
-            return createErrorResponse(ErrorEntity.CATEGORY_ALREADY_CREATED);
-        }
+        if (optionalUserCategory.isPresent()) { return createErrorResponse(ErrorEntity.CATEGORY_ALREADY_CREATED); }
         Category category = new Category(convertedCategoryName, user);
         categoryRepository.save(category);
         return createGoodResponse(categoryMapper.toCategoryDtoConvert(category));
     }
 
-    @Override
-    public ResponseEntity updateCategory(CategoryDto categoryDto, long id) {
-        Category category = categoryRepository.findById(id)
+    public ResponseEntity updateCategoryById(String authorization, CategoryDto categoryDto, long id) {
+        User user = jwtHelper.getUserFromHeader(authorization);
+        Long userId = user.getId();
+        Category category = categoryRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new NotFoundException("Category with id " + id + " not found"));
+        Optional<Category> optionalCategory = categoryRepository.findByNameAndUserId(categoryDto.getName(), user);
+        if (optionalCategory.isPresent()) { return createErrorResponse(ErrorEntity.CATEGORY_ALREADY_CREATED); }
         category.setName(categoryDto.getName());
         categoryRepository.save(category);
         return createGoodResponse(categoryMapper.toCategoryDtoConvert(category));
     }
 
     @Override
-    public ResponseEntity getAllCategories() {
-        List<Category> categories = categoryRepository.findAll();
-        return createGoodResponse(categoryMapper.toCategoryDtoList(categories));    }
+    public ResponseEntity getAllCategories(String authorization) {
+        User user = jwtHelper.getUserFromHeader(authorization);
+        List<Category> categories = categoryRepository.findAllByUserId(user.getId());
+        return createGoodResponse(categoryMapper.toCategoryDtoList(categories));
+    }
 
     @Override
-    public ResponseEntity deleteCategoryById(long id) {
-        Category category = categoryRepository.findById(id)
+    public ResponseEntity deleteCategoryById(String authorization, long id) {
+        Long userId = jwtHelper.getUserFromHeader(authorization).getId();
+        Category category = categoryRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new NotFoundException("Category with id " + id + " not found"));
         categoryRepository.delete(category);
         return createGoodResponse("Deleted");
     }
 
     @Override
-    public ResponseEntity getCategoryById(long id) {
-        return createGoodResponse(categoryMapper.toCategoryOutDtoConvert(categoryRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Category with id " + id + " not found"))));
-
+    public ResponseEntity getCategoryById(String authorization, long id) {
+        Long userId = jwtHelper.getUserFromHeader(authorization).getId();
+        Category category = categoryRepository.findByIdAndUserId(id, userId)
+                .orElseThrow(() -> new NotFoundException("Category with id " + id + " not found"));
+        return createGoodResponse(categoryMapper.toCategoryOutDtoConvert(category));
     }
 }

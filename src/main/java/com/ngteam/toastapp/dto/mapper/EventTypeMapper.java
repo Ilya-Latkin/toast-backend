@@ -41,7 +41,7 @@ public class EventTypeMapper {
         eventTypeOutDto.setEvents(
                 eventType.getEvents()
                         .stream()
-                        .map(eventMapper::toEventOutDtoConvert)
+                        .map(event -> event.getName() + "#" + event.getId())
                         .collect(Collectors.toList())
         );
         return eventTypeOutDto;

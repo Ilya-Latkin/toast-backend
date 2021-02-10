@@ -9,7 +9,6 @@ import com.ngteam.toastapp.model.User;
 import com.ngteam.toastapp.repositories.CategoryRepository;
 import com.ngteam.toastapp.repositories.EventRepository;
 import com.ngteam.toastapp.repositories.EventTypeRepository;
-import com.ngteam.toastapp.repositories.UserRepository;
 import com.ngteam.toastapp.services.EventService;
 import com.ngteam.toastapp.utils.ErrorEntity;
 import com.ngteam.toastapp.utils.ResponseCreator;
@@ -29,14 +28,10 @@ public class EventServiceImpl extends ResponseCreator implements EventService {
     private final CategoryRepository categoryRepository;
     private final EventTypeRepository eventTypeRepository;
     private final EventMapper eventMapper;
-    private final UserRepository userRepository;
 
     @Override
     public ResponseEntity createEvent(String authorization, EventDto eventDto) {
-        String token = JwtHelper.getTokenFromHeader(authorization);
-        String emailFromToken = jwtHelper.getEmailFromToken(token);
-        User user = userRepository.findByEmail(emailFromToken)
-                .orElseThrow(() -> new NotFoundException("autizm")); // <--- autizm / shobi ne rugalsa
+        User user = jwtHelper.getUserFromHeader(authorization);
         String eventNameDto = eventDto.getName();
         String convertedEventName = eventNameDto.substring(0, 1).toUpperCase() + eventNameDto.substring(1).toLowerCase();
         Optional<Event> optionalUserEvent = eventRepository.findByNameAndUserId(convertedEventName, user);
@@ -53,8 +48,9 @@ public class EventServiceImpl extends ResponseCreator implements EventService {
     }
 
     @Override
-    public ResponseEntity updateEventById(EventDto eventDto, long id) {
-        Event event = eventRepository.findById(id)
+    public ResponseEntity updateEventById(String authorization, EventDto eventDto, long id) {
+        Long userId = jwtHelper.getUserFromHeader(authorization).getId();
+        Event event = eventRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new NotFoundException("Event with id " + id + " not found"));
         event.setName(eventDto.getName());
         event.setCategory(categoryRepository.findById(eventDto.getCategoryId())
@@ -67,20 +63,23 @@ public class EventServiceImpl extends ResponseCreator implements EventService {
     }
 
     @Override
-    public ResponseEntity getAllEvents() {
-        List<Event> events = eventRepository.findAll();
+    public ResponseEntity getAllEvents(String authorization) {
+        Long userId = jwtHelper.getUserFromHeader(authorization).getId();
+        List<Event> events = eventRepository.findAllByUserId(userId);
         return createGoodResponse(eventMapper.toEventDtoList(events));
     }
 
     @Override
-    public ResponseEntity getEventById(long id) {
-        return createGoodResponse(eventMapper.toEventOutDtoConvert(eventRepository.findById(id)
+    public ResponseEntity getEventById(String authorization, long id) {
+        Long userId = jwtHelper.getUserFromHeader(authorization).getId();
+        return createGoodResponse(eventMapper.toEventOutDtoConvert(eventRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new NotFoundException("Event with id " + id + " not found"))));
     }
 
     @Override
-    public ResponseEntity deleteEventById(long id) {
-        eventRepository.delete(eventRepository.findById(id)
+    public ResponseEntity deleteEventById(String authorization, long id) {
+        Long userId = jwtHelper.getUserFromHeader(authorization).getId();
+        eventRepository.delete(eventRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new NotFoundException("Event with id " + id + " not found")));
         return createGoodResponse("Deleted");
     }

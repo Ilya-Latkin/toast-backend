@@ -5,12 +5,12 @@ import com.ngteam.toastapp.dto.in.SignInDto;
 import com.ngteam.toastapp.dto.in.SignUpDto;
 import com.ngteam.toastapp.dto.in.TokenDto;
 import com.ngteam.toastapp.model.User;
-import com.ngteam.toastapp.repositories.UserRepository;
 import com.ngteam.toastapp.services.AuthService;
 import com.ngteam.toastapp.services.UserService;
 import com.ngteam.toastapp.utils.ErrorEntity;
 import com.ngteam.toastapp.utils.ResponseCreator;
 import com.ngteam.toastapp.utils.Validator;
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,21 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 @RestController
+@AllArgsConstructor
 public class AuthController extends ResponseCreator {
 
-    private final UserRepository userRepository;
     private final JwtHelper jwtHelper;
     private final UserService userService;
     private final AuthService authService;
     private final Validator validator;
-
-    public AuthController(UserRepository userRepository, JwtHelper jwtHelper, UserService userService, AuthService authService, Validator validator) {
-        this.userRepository = userRepository;
-        this.jwtHelper = jwtHelper;
-        this.userService = userService;
-        this.authService = authService;
-        this.validator = validator;
-    }
 
     @PostMapping("/sign-up")
     ResponseEntity registrationUser(@RequestBody SignUpDto signUpDto) {

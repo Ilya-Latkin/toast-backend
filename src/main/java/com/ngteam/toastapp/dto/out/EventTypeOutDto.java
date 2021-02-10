@@ -10,6 +10,6 @@ import java.util.List;
 public class EventTypeOutDto {
     private long id;
     private String name;
-    private List<EventOutDto> events;
+    private List<String> events;
     private UserDtoOut user;
 }
