@@ -1,7 +1,9 @@
 package com.ngteam.toastapp.services;
 
+import com.ngteam.toastapp.dto.in.ProfileUpdateDto;
 import com.ngteam.toastapp.dto.in.UserDto;
 import com.ngteam.toastapp.model.User;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Optional;
 
@@ -21,4 +23,8 @@ public interface UserService {
     boolean delete(User user);
 
     UserDto getUserProfileInfo(String authorization);
+
+    ResponseEntity changePassword(String authorization, ProfileUpdateDto profileUpdateDto);
+
+    ResponseEntity changeUserName(String authorization, ProfileUpdateDto profileUpdateDto);
 }

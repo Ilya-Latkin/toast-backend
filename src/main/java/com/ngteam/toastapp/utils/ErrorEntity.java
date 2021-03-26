@@ -20,6 +20,7 @@ public enum ErrorEntity {
     EVENT_ALREADY_CREATED (454, "Событие уже создано"),
 
     // Регистрация
+    DUPLICATE_PASSWORD(460, "Пароль уже используется"),
     PASSWORD_TOO_SHORT(460, "Пароль слишком короткий"),
     INVALID_EMAIL(461, "Некорректный Email"),
 

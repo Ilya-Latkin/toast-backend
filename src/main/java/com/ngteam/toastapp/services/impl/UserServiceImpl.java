@@ -1,26 +1,32 @@
 package com.ngteam.toastapp.services.impl;
 
 import com.ngteam.toastapp.config.filter.JwtHelper;
+import com.ngteam.toastapp.dto.in.ProfileUpdateDto;
 import com.ngteam.toastapp.dto.in.UserDto;
 import com.ngteam.toastapp.exceptions.InvalidTokenException;
 import com.ngteam.toastapp.exceptions.NotFoundException;
 import com.ngteam.toastapp.model.User;
 import com.ngteam.toastapp.repositories.UserRepository;
 import com.ngteam.toastapp.services.UserService;
+import com.ngteam.toastapp.utils.ErrorEntity;
+import com.ngteam.toastapp.utils.ResponseCreator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends ResponseCreator implements UserService {
 
-    private final JwtHelper jwtHelper;
-    private final UserRepository userRepository;
+    @Autowired
+    private JwtHelper jwtHelper;
 
-    public UserServiceImpl(JwtHelper jwtHelper, UserRepository userRepository) {
-        this.jwtHelper = jwtHelper;
-        this.userRepository = userRepository;
-    }
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public UserDto save(User user) {
@@ -87,6 +93,32 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new NotFoundException("User with email " + email + " not found");
         }
+    }
+
+    @Override
+    public ResponseEntity changePassword(String authorization, ProfileUpdateDto profileUpdateDto) {
+        String token = JwtHelper.getTokenFromHeader(authorization);
+        if (profileUpdateDto.getPassword().length() > 5 && profileUpdateDto.getPassword() != null) {
+            User user = userService.getByEmail(jwtHelper.getEmailFromToken(token));
+            if (profileUpdateDto.getPassword().equals(user.getPassword())) {
+                return createErrorResponse(ErrorEntity.DUPLICATE_PASSWORD);
+            } else {
+                user.setPassword(profileUpdateDto.getPassword());
+                userRepository.save(user);
+                return createGoodResponse("Password has been changed");
+            }
+        } else {
+            return createErrorResponse(ErrorEntity.INCORRECT_PASSWORD);
+        }
+    }
+
+    @Override
+    public ResponseEntity changeUserName(String authorization, ProfileUpdateDto profileUpdateDto) {
+        String token = JwtHelper.getTokenFromHeader(authorization);
+        User user = userService.getByEmail(jwtHelper.getEmailFromToken(token));
+        user.setName(profileUpdateDto.getName());
+        userRepository.save(user);
+        return createGoodResponse("Name has been changed");
     }
 
 }
