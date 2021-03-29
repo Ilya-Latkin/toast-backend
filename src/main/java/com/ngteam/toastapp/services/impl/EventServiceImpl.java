@@ -4,6 +4,7 @@ import com.ngteam.toastapp.config.filter.JwtHelper;
 import com.ngteam.toastapp.dto.in.EventDto;
 import com.ngteam.toastapp.dto.mapper.EventMapper;
 import com.ngteam.toastapp.exceptions.NotFoundException;
+import com.ngteam.toastapp.model.Category;
 import com.ngteam.toastapp.model.Event;
 import com.ngteam.toastapp.model.User;
 import com.ngteam.toastapp.repositories.CategoryRepository;

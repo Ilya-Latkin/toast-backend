@@ -1,7 +1,5 @@
 package com.ngteam.toastapp.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +10,7 @@ import java.util.List;
 @Getter
 @Entity
 @Table(name = "event_types")
-public class EventType {
+public class  EventType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

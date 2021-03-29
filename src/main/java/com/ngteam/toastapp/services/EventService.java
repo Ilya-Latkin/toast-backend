@@ -1,6 +1,7 @@
 package com.ngteam.toastapp.services;
 
 import com.ngteam.toastapp.dto.in.EventDto;
+import com.ngteam.toastapp.model.Category;
 import org.springframework.http.ResponseEntity;
 
 public interface EventService {

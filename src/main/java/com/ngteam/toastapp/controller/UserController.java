@@ -15,12 +15,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/user")
+@AllArgsConstructor
 public class UserController extends ResponseCreator {
 
-    @Autowired
-    private JwtHelper jwtHelper;
-    @Autowired
-    private UserService userService;
+    private final JwtHelper jwtHelper;
+    private final UserService userService;
 
     @GetMapping
     ResponseEntity getProfile(@RequestHeader String authorization) {

@@ -1,15 +1,16 @@
 package com.ngteam.toastapp.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Setter
-@Getter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "users")
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,14 +27,9 @@ public class User {
     private List<Category> userCategory;
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Event> userEvent;
-
-
-    public User() {
-    }
-
-    public User(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
+    @Column
+    @Enumerated(value = EnumType.STRING)
+    private State state;
+    @Column
+    private String confirmCode;
 }

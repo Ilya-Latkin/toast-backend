@@ -1,6 +1,5 @@
 package com.ngteam.toastapp.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,7 +22,7 @@ public class Category {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Category() { }
+    public Category() {}
 
     public Category(String name, User user) {
         this.name = name;

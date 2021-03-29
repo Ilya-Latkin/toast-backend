@@ -1,6 +1,5 @@
 package com.ngteam.toastapp.dto.out;
 
-import com.ngteam.toastapp.model.Event;
 import lombok.Getter;
 import lombok.Setter;
 

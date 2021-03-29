@@ -5,12 +5,15 @@ import com.ngteam.toastapp.dto.in.CategoryDto;
 import com.ngteam.toastapp.dto.mapper.CategoryMapper;
 import com.ngteam.toastapp.exceptions.NotFoundException;
 import com.ngteam.toastapp.model.Category;
+import com.ngteam.toastapp.model.Event;
 import com.ngteam.toastapp.model.User;
 import com.ngteam.toastapp.repositories.CategoryRepository;
+import com.ngteam.toastapp.repositories.EventRepository;
 import com.ngteam.toastapp.services.CategoryService;
 import com.ngteam.toastapp.utils.ErrorEntity;
 import com.ngteam.toastapp.utils.ResponseCreator;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +25,7 @@ import java.util.Optional;
 public class CategoryServiceImpl extends ResponseCreator implements CategoryService {
 
     private final CategoryRepository categoryRepository;
+    private final EventRepository eventRepository;
     private final JwtHelper jwtHelper;
     private final CategoryMapper categoryMapper;
 
@@ -61,6 +65,12 @@ public class CategoryServiceImpl extends ResponseCreator implements CategoryServ
         Long userId = jwtHelper.getUserFromHeader(authorization).getId();
         Category category = categoryRepository.findByIdAndUserId(id, userId)
                 .orElseThrow(() -> new NotFoundException("Category with id " + id + " not found"));
+        List<Event> events = eventRepository.findAllByCategory(category);
+        for(Event event: events) {
+            event.setCategory(categoryRepository.findById(0L).
+                    orElseThrow(() -> new NotFoundException("Сперва необходимо создать User(Admin) c CategoryId = 0")));
+            eventRepository.save(event);
+        }
         categoryRepository.delete(category);
         return createGoodResponse("Deleted");
     }

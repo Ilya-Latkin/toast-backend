@@ -1,6 +1,5 @@
 package com.ngteam.toastapp.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -27,7 +26,7 @@ public class Event {
     @ManyToOne
     private EventType eventType;
     @JoinColumn(name = "categories_id")
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH)
     private Category category;
     @JoinColumn(name = "user_id")
     @ManyToOne

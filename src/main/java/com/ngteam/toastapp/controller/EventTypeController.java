@@ -1,9 +1,11 @@
 package com.ngteam.toastapp.controller;
 
 import com.ngteam.toastapp.dto.in.EventTypeDto;
+import com.ngteam.toastapp.services.EventTypeService;
 import com.ngteam.toastapp.services.impl.EventTypeServiceImpl;
 import com.ngteam.toastapp.utils.ResponseCreator;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class EventTypeController extends ResponseCreator {
 
-    private final EventTypeServiceImpl eventTypeService;
+    private final EventTypeService eventTypeService;
 
     @PostMapping
     ResponseEntity createEventType(@RequestHeader String authorization, @RequestBody EventTypeDto eventTypeDto) {
