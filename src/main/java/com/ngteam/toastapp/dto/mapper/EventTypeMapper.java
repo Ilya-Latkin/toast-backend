@@ -1,17 +1,17 @@
 package com.ngteam.toastapp.dto.mapper;
 
-import com.ngteam.toastapp.config.filter.JwtHelper;
+import com.ngteam.toastapp.security.JwtHelper;
 import com.ngteam.toastapp.dto.in.EventTypeDto;
 import com.ngteam.toastapp.dto.out.EventTypeOutDto;
 import com.ngteam.toastapp.model.EventType;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
+@Component
 public class EventTypeMapper {
 
     @Autowired

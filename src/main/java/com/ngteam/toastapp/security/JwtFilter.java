@@ -1,4 +1,4 @@
-package com.ngteam.toastapp.config.filter;
+package com.ngteam.toastapp.security;
 
 import com.ngteam.toastapp.model.User;
 import com.ngteam.toastapp.repositories.UserRepository;

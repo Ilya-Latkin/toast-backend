@@ -1,6 +1,6 @@
 package com.ngteam.toastapp.services.impl;
 
-import com.ngteam.toastapp.config.filter.JwtHelper;
+import com.ngteam.toastapp.security.JwtHelper;
 import com.ngteam.toastapp.dto.in.EventTypeDto;
 import com.ngteam.toastapp.dto.mapper.EventTypeMapper;
 import com.ngteam.toastapp.exceptions.NotFoundException;

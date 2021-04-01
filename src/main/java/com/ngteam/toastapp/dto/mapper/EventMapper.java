@@ -5,12 +5,13 @@ import com.ngteam.toastapp.dto.out.EventOutDto;
 import com.ngteam.toastapp.model.Event;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
+@Component
 public class EventMapper {
 
     @Autowired

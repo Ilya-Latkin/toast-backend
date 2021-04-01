@@ -1,18 +1,16 @@
 package com.ngteam.toastapp.controller;
 
-import com.ngteam.toastapp.config.filter.JwtHelper;
+import com.ngteam.toastapp.security.JwtHelper;
 import com.ngteam.toastapp.dto.in.SignInDto;
 import com.ngteam.toastapp.dto.in.SignUpDto;
 import com.ngteam.toastapp.dto.in.TokenDto;
 import com.ngteam.toastapp.model.User;
 import com.ngteam.toastapp.services.AuthService;
 import com.ngteam.toastapp.services.UserService;
-import com.ngteam.toastapp.services.impl.UserServiceImpl;
 import com.ngteam.toastapp.utils.ErrorEntity;
 import com.ngteam.toastapp.utils.ResponseCreator;
 import com.ngteam.toastapp.utils.Validator;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

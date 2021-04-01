@@ -1,6 +1,6 @@
 package com.ngteam.toastapp.services.impl;
 
-import com.ngteam.toastapp.config.filter.JwtHelper;
+import com.ngteam.toastapp.security.JwtHelper;
 import com.ngteam.toastapp.dto.in.ProfileUpdateDto;
 import com.ngteam.toastapp.dto.in.UserDto;
 import com.ngteam.toastapp.exceptions.InvalidTokenException;

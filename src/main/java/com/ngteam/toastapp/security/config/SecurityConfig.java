@@ -1,6 +1,6 @@
-package com.ngteam.toastapp.config;
+package com.ngteam.toastapp.security.config;
 
-import com.ngteam.toastapp.config.filter.JwtFilter;
+import com.ngteam.toastapp.security.JwtFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

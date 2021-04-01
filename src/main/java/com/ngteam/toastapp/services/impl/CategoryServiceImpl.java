@@ -1,6 +1,6 @@
 package com.ngteam.toastapp.services.impl;
 
-import com.ngteam.toastapp.config.filter.JwtHelper;
+import com.ngteam.toastapp.security.JwtHelper;
 import com.ngteam.toastapp.dto.in.CategoryDto;
 import com.ngteam.toastapp.dto.mapper.CategoryMapper;
 import com.ngteam.toastapp.exceptions.NotFoundException;
@@ -13,7 +13,6 @@ import com.ngteam.toastapp.services.CategoryService;
 import com.ngteam.toastapp.utils.ErrorEntity;
 import com.ngteam.toastapp.utils.ResponseCreator;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
