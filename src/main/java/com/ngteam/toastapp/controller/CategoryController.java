@@ -4,7 +4,6 @@ import com.ngteam.toastapp.dto.in.CategoryDto;
 import com.ngteam.toastapp.services.CategoryService;
 import com.ngteam.toastapp.utils.ResponseCreator;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

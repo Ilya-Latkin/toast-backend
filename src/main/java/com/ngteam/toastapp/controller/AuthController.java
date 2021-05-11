@@ -1,20 +1,19 @@
 package com.ngteam.toastapp.controller;
 
-import com.ngteam.toastapp.security.JwtHelper;
 import com.ngteam.toastapp.dto.in.SignInDto;
 import com.ngteam.toastapp.dto.in.SignUpDto;
 import com.ngteam.toastapp.dto.in.TokenDto;
 import com.ngteam.toastapp.model.User;
+import com.ngteam.toastapp.security.JwtHelper;
 import com.ngteam.toastapp.services.AuthService;
+import com.ngteam.toastapp.services.ConfirmationService;
 import com.ngteam.toastapp.services.UserService;
 import com.ngteam.toastapp.utils.ErrorEntity;
 import com.ngteam.toastapp.utils.ResponseCreator;
 import com.ngteam.toastapp.utils.Validator;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -26,6 +25,7 @@ public class AuthController extends ResponseCreator {
     private final UserService userService;
     private final AuthService authService;
     private final Validator validator;
+    private final ConfirmationService confirmationService;
 
     @PostMapping("/sign-up")
     ResponseEntity registrationUser(@RequestBody SignUpDto signUpDto) {
@@ -45,5 +45,10 @@ public class AuthController extends ResponseCreator {
         }
         User user = userService.getByEmail(signInDto.getEmail());
         return createGoodResponse(new TokenDto(jwtHelper.generateToken(user)));
+    }
+
+    @GetMapping("/sendcode")
+    ResponseEntity sendConfirmCode(@RequestHeader String authorization) {
+        return createGoodResponse(confirmationService.sendCode(jwtHelper.getUserFromHeader(authorization)));
     }
 }

@@ -4,6 +4,8 @@ import com.ngteam.toastapp.dto.in.SignInDto;
 import com.ngteam.toastapp.dto.in.SignUpDto;
 import com.ngteam.toastapp.model.User;
 import com.ngteam.toastapp.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -15,6 +17,8 @@ public class Validator extends ResponseCreator {
     private final int MIN_PASSWORD_LENGTH = 5;
     private final Pattern emailPattern = Pattern.compile("^(.+)@(.+)$");
     private final UserService userService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public Validator(UserService userService) {
         this.userService = userService;
@@ -26,7 +30,7 @@ public class Validator extends ResponseCreator {
             return Optional.of(ErrorEntity.USER_NOT_FOUND);
         }
         User userEntity = optionalUserEntity.get();
-        if (userEntity.getPassword().equals(form.getPassword()) == false) {
+        if (!passwordEncoder.matches(form.getPassword(),userEntity.getPassword())) {
             return Optional.of(ErrorEntity.INCORRECT_PASSWORD);
         }
         return Optional.empty();

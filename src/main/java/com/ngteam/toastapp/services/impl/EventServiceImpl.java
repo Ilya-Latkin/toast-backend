@@ -1,6 +1,5 @@
 package com.ngteam.toastapp.services.impl;
 
-import com.ngteam.toastapp.security.JwtHelper;
 import com.ngteam.toastapp.dto.in.EventDto;
 import com.ngteam.toastapp.dto.mapper.EventMapper;
 import com.ngteam.toastapp.exceptions.NotFoundException;
@@ -9,6 +8,7 @@ import com.ngteam.toastapp.model.User;
 import com.ngteam.toastapp.repositories.CategoryRepository;
 import com.ngteam.toastapp.repositories.EventRepository;
 import com.ngteam.toastapp.repositories.EventTypeRepository;
+import com.ngteam.toastapp.security.JwtHelper;
 import com.ngteam.toastapp.services.EventService;
 import com.ngteam.toastapp.utils.ErrorEntity;
 import com.ngteam.toastapp.utils.ResponseCreator;

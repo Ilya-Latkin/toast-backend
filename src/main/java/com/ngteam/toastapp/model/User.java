@@ -31,6 +31,4 @@ public class User {
     @Column
     @Enumerated(value = EnumType.STRING)
     private State state;
-    @Column
-    private String confirmCode;
 }
