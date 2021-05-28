@@ -9,4 +9,5 @@ public interface CategoryService {
     ResponseEntity getAllCategories(String authorization);
     ResponseEntity deleteCategoryById(String authorization, long id);
     ResponseEntity getCategoryById(String authorization, long id);
+    void createDefaultCategories();
 }

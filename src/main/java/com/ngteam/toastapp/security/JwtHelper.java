@@ -4,6 +4,7 @@ import com.ngteam.toastapp.exceptions.NotFoundException;
 import com.ngteam.toastapp.model.User;
 import com.ngteam.toastapp.repositories.UserRepository;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.impl.TextCodec;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +31,7 @@ public class JwtHelper {
         Claims claims = Jwts.claims();
         claims.put("email", user.getEmail());
         claims.put("password", user.getPassword());
+
         return Jwts.builder()
                 .setClaims(claims)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
@@ -37,6 +39,7 @@ public class JwtHelper {
     }
 
     public boolean validateToken(String token) {
+        String secretKey;
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
             return true;

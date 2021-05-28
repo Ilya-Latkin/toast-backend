@@ -31,4 +31,8 @@ public class User {
     @Column
     @Enumerated(value = EnumType.STRING)
     private State state;
+    @Column
+    private String confirmCode;
+    @ManyToMany(mappedBy = "users")
+    private List<Event> events;
 }

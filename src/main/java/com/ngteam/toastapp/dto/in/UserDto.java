@@ -1,10 +1,8 @@
 package com.ngteam.toastapp.dto.in;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Setter
-@Getter
+@Data
 public class UserDto {
     private String name;
     private String email;

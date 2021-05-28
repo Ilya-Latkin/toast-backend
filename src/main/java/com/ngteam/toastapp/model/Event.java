@@ -1,14 +1,16 @@
 package com.ngteam.toastapp.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
-@Setter
-@Getter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "events")
 public class Event {
@@ -31,15 +33,6 @@ public class Event {
     @JoinColumn(name = "user_id")
     @ManyToOne
     private User user;
-
-    public Event() { }
-
-    public Event(String name, String description, Date date, EventType eventType, Category category, User user) {
-        this.name = name;
-        this.description = description;
-        this.date = date;
-        this.eventType = eventType;
-        this.category = category;
-        this.user = user;
-    }
+    @ManyToMany
+    private List<User> users;
 }

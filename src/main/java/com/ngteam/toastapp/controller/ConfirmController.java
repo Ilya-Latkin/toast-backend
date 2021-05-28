@@ -1,22 +1,26 @@
 package com.ngteam.toastapp.controller;
 
-import com.ngteam.toastapp.services.ConfirmationService;
-import com.ngteam.toastapp.utils.ResponseCreator;
-import lombok.AllArgsConstructor;
+import com.ngteam.toastapp.exceptions.NotFoundException;
+import com.ngteam.toastapp.model.State;
+import com.ngteam.toastapp.model.User;
+import com.ngteam.toastapp.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-@RequestMapping(path = "/confirm")
 @Controller
-@AllArgsConstructor
-public class ConfirmController extends ResponseCreator {
+public class ConfirmController {
 
-    private final ConfirmationService confirmationService;
+    @Autowired
+    private UserRepository userRepository;
 
-    @GetMapping("/{code}")
+    @GetMapping("/confirm/{code}")
     public String confirmUser(@PathVariable("code") String code){
-        return confirmationService.confirmAccount(code);
+        User user = userRepository.findByConfirmCode(code)
+                .orElseThrow(() -> new NotFoundException("User with this confirm code not found"));
+        user.setState(State.CONFIRMED);
+        userRepository.save(user);
+        return "sucess_confirm";
     }
 }

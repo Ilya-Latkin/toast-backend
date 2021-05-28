@@ -1,17 +1,19 @@
 package com.ngteam.toastapp.dto.in;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.*;
 
 import java.util.Date;
 
-@Getter
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class EventDto {
     private String name;
     private String description;
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private Date date;
-    private long eventTypeId;
-    private long categoryId;
+    private Long eventTypeId;
+    private Long categoryId;
 }

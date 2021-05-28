@@ -5,7 +5,10 @@ import com.ngteam.toastapp.services.EventService;
 import com.ngteam.toastapp.utils.ResponseCreator;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import java.text.ParseException;
+
 
 @RestController
 @RequestMapping(path = "/event")
@@ -15,7 +18,7 @@ public class EventController extends ResponseCreator {
     private final EventService eventService;
 
     @PostMapping
-    ResponseEntity createEvent(@RequestHeader String authorization, @RequestBody EventDto eventDto) {
+    ResponseEntity createEvent(@RequestHeader String authorization, @Validated @RequestBody EventDto eventDto) throws ParseException {
         return eventService.createEvent(authorization, eventDto);
     }
 

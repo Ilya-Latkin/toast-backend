@@ -1,11 +1,12 @@
 package com.ngteam.toastapp.dto.in;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
-@Setter
-@Getter
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CategoryDto {
-    private long id;
+    private Long id;
     private String name;
 }

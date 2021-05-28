@@ -1,16 +1,17 @@
 package com.ngteam.toastapp.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
-@Setter
-@Getter
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "event_types")
-public class  EventType {
+public class EventType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -21,11 +22,4 @@ public class  EventType {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    public EventType() {}
-
-    public EventType(String name, User user) {
-        this.name = name;
-        this.user = user;
-    }
 }

@@ -1,11 +1,15 @@
 package com.ngteam.toastapp.dto.in;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Setter
-@Getter
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class EventTypeDto {
-    private long id;
+    private Long id;
     private String name;
 }
